@@ -153,7 +153,8 @@ router.get('/:id', auth, async (req, res) => {
 // ════════════════════════════════════════════════════════════
 router.post('/', auth, [...orphanRules(), handle], async (req, res) => {
   try {
-    if (req.body.schoolType === 'public') req.body.schoolName = '';
+    if (req.body.schoolType === 'public')  req.body.school     = '';
+    if (req.body.schoolType === 'private') req.body.schoolName = '';
     const doc = await _processPhoto(req.body, req.body.id);
 
     await Orphan.updateOne(
@@ -224,7 +225,8 @@ router.post('/bulk', auth, [
 // ════════════════════════════════════════════════════════════
 router.put('/:id', auth, [...orphanRules(), handle], async (req, res) => {
   try {
-    if (req.body.schoolType === 'public') req.body.schoolName = '';
+    if (req.body.schoolType === 'public')  req.body.school     = '';
+    if (req.body.schoolType === 'private') req.body.schoolName = '';
     const doc = await _processPhoto(req.body, req.params.id);
 
     await Orphan.updateOne(
