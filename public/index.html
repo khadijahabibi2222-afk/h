@@ -1619,15 +1619,15 @@ body.rtl .nav-badge { margin-left: 0; margin-right: auto; }
             <option value="private">🏫 خصوصی</option>
           </select>
         </div>
-        <div class="fg" id="school-dropdown-wrap">
-          <label class="fl">نام مکتب (از لیست)</label>
+        <div class="fg" id="school-dropdown-wrap" style="display:none;">
+          <label class="fl">نام مکتب خصوصی <span style="color:var(--red)">*</span> (از لیست)</label>
           <select class="fi" id="f-school">
             <option value="">— انتخاب کنید —</option>
           </select>
         </div>
         <div class="fg" id="school-name-wrap" style="display:none;">
-          <label class="fl">نام مکتب خصوصی <span style="color:var(--red)">*</span></label>
-          <input class="fi" type="text" id="f-school-name" placeholder="نام مکتب خصوصی را وارد کنید" lang="fa">
+          <label class="fl">نام مکتب دولتی <span style="color:var(--red)">*</span></label>
+          <input class="fi" type="text" id="f-school-name" placeholder="نام مکتب دولتی را وارد کنید" lang="fa">
         </div>
 
         <div class="fg">
@@ -3226,8 +3226,8 @@ function saveOrphan() {
     tazkira: document.getElementById('f-tazkira')?.value.trim()||'',
     goesSchool,
     schoolType: goesSchool ? schoolType : '',
-    schoolName: (goesSchool && schoolType === 'private') ? document.getElementById('f-school-name').value.trim() : '',
-    school: (goesSchool && schoolType !== 'private') ? document.getElementById('f-school').value : '',
+    schoolName: (goesSchool && schoolType === 'public') ? document.getElementById('f-school-name').value.trim() : '',
+    school: (goesSchool && schoolType === 'private') ? document.getElementById('f-school').value : '',
     studenttype: document.getElementById('f-studenttype')?.value || 'orphan',
     priority: document.getElementById('f-priority')?.value || '',
     edutype: document.getElementById('f-edutype').value,
@@ -4726,16 +4726,21 @@ function onSchoolTypeChange() {
     if (customWrap) customWrap.style.display = 'none';
     return;
   }
-  if (type === 'private') {
+  if (type === 'public') {
+    // دولتی: یوزر نام مکتب را دستی وارد می‌کند
     if (dropdownWrap) dropdownWrap.style.display = 'none';
     if (customWrap) customWrap.style.display = '';
-  } else if (type === 'public') {
+    const schoolSel = document.getElementById('f-school');
+    if (schoolSel) schoolSel.value = '';
+  } else if (type === 'private') {
+    // خصوصی: یوزر از لیست آماده انتخاب می‌کند
     if (dropdownWrap) dropdownWrap.style.display = '';
     if (customWrap) customWrap.style.display = 'none';
-    const customInput = document.getElementById('f-school-name');
-    if (customInput) customInput.value = '';
+    const nameInput = document.getElementById('f-school-name');
+    if (nameInput) nameInput.value = '';
   } else {
-    if (dropdownWrap) dropdownWrap.style.display = '';
+    // هیچ‌کدام انتخاب نشده
+    if (dropdownWrap) dropdownWrap.style.display = 'none';
     if (customWrap) customWrap.style.display = 'none';
   }
 }
